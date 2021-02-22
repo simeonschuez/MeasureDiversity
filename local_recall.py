@@ -36,7 +36,10 @@ def local_recall_scores(generated, ref_data):
     """
     recalled = defaultdict(int)
     total = defaultdict(int)
+    generated_imgs = generated.keys()
     for image, references in ref_data.items():
+        if image not in generated_imgs:
+            continue
         # Count the content words in each of the reference descriptions.
         word_counter = Counter()
         for reference in references:
@@ -66,7 +69,10 @@ def local_recall_counts(generated, ref_data):
     """
     recalled_counter = defaultdict(Counter)
     missed_counter = defaultdict(Counter)
+    generated_imgs = generated.keys()
     for image, references in ref_data.items():
+        if image not in generated_imgs:
+            continue
         # Count the content words in each of the reference descriptions.
         word_counter = Counter()
         for reference in references:
@@ -94,10 +100,10 @@ def plot_scores(results):
     fig, ax = plt.subplots(figsize=(32,20))
     lw = 8.0
     ms = 25.0
-    
+
     score_index = {name: entry['scores'] for name, entry in results.items()}
     ordered_systems = sorted(score_index.items(), key=lambda pair:pair[1][4], reverse=True)
-    
+
     for name, scores in ordered_systems:
         # nums = list(reversed(range(1,11)))
         # plt.plot(entry['percentiles']['val_scores'],nums,'o-',label=name,linewidth=5.0,markersize=15.0)
@@ -114,7 +120,7 @@ def plot_scores(results):
                          markersize=40,
                          markerfacecolor=system2color[name]) for name,_ in ordered_systems]
     plt.legend(legend_markers, labels, numpoints=1, loc=2, handletextpad=-0.3, bbox_to_anchor=(0, 1.1))
-    
+
     # labels = ['-'.join(map(str,tup)) for tup in zip(range(0,100,10),range(10,110,10))]
     # labels = list(reversed(labels))
     # labels = [str(i) for i in range(1,11)]

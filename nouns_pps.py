@@ -10,7 +10,7 @@ nlp = spacy.load('en_core_web_sm', entity=False)
 
 def pp_stats(entries):
     "Function to annotate existing coco data"
-    print('PPs')
+    #print('PPs')
     data = dict()
     data['pp_counter'] = Counter()
     data['level_counter'] = Counter()
@@ -39,7 +39,7 @@ def pp_stats(entries):
 
 def compound_stats(entries):
     "Count the total number of compounds in the data, and their lengths"
-    print('Compounds')
+    #print('Compounds')
     data = dict()
     data['compound_lengths'] = Counter()
     data['compound_counts']  = Counter()
@@ -106,14 +106,14 @@ def get_system_row(compound_data, pp_data):
     compound_length_counts  = get_compound_lengths(compound_data)
     compound_ratio          = get_compound_ratio(compound_data)
     compound_types          = get_compound_types(compound_data, length=2)
-    
+
     pp_levels               = get_pp_levels(pp_data)
     prep_ratio              = get_pp_ratio(pp_data)
     pp_types                = get_num_pp_types(pp_data, level=1)
-    
+
     compound_ratio          = ["{:.2f}".format(compound_ratio[0])]
     prep_ratio              = ["{:.2f}".format(prep_ratio[0])]
-    
+
     row = compound_length_counts + compound_ratio + compound_types + pp_levels + prep_ratio + pp_types
     return row
 
@@ -121,19 +121,19 @@ def get_reference_row(all_compound_data, all_pp_data):
     compound_length_counts  = average_rows([get_compound_lengths(data) for data in all_compound_data])
     compound_ratio          = average_rows([get_compound_ratio(data) for data in all_compound_data])
     compound_types          = average_rows([get_compound_types(data, length=2) for data in all_compound_data])
-    
+
     pp_levels               = average_rows([get_pp_levels(data) for data in all_pp_data])
     prep_ratio              = average_rows([get_pp_ratio(data) for data in all_pp_data])
     pp_types                = average_rows([get_num_pp_types(data, level=1) for data in all_pp_data])
-    
+
     compound_length_counts  = ["{:.0f}".format(i) for i in compound_length_counts]
     compound_ratio          = ["{:.2f}".format(compound_ratio[0])]
     compound_types          = ["{:.0f}".format(compound_types[0])]
-    
+
     pp_levels               = ["{:.0f}".format(i) for i in pp_levels]
     prep_ratio              = ["{:.2f}".format(prep_ratio[0])]
     pp_types                = ["{:.0f}".format(pp_types[0])]
-    
+
     row = compound_length_counts + compound_ratio + compound_types + pp_levels + prep_ratio + pp_types
     return row
 
